@@ -58,20 +58,25 @@ tab1, tab2 = st.tabs(["人口推移", "男女比較"])
 
 with tab1:
     display_df = df_selected[year_cols].copy()
+    display_df.index = [""]
 
+    if display_type == "表":
+        st.dataframe(
+            display_df,
+            use_container_width=True
+        )
 
-display_df.index = [""]
+    elif display_type == "グラフ":
+        plot_df = display_df.T
+        plot_df.columns = ["人口（千人）"]
+        st.line_chart(plot_df)
 
-st.dataframe(
-    display_df,
-    use_container_width=True
-)
-
-with st.expander("注意"):
+    with st.expander("注意"):
         st.write(
             "2020年10月1日現在は総務省統計局「国勢調査」。"
             "なお、日本人人口は「国勢調査（不詳補完値）」による。"
         )
+
 
 with tab2:
     st.subheader("2024年 男女人口比較")
